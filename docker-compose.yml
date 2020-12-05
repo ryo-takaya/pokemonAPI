@@ -1,0 +1,31 @@
+version: '3'
+services:
+  web:
+    container_name: pokemon-api-web
+    build:
+      context: .
+      dockerfile: ./Docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html:cached
+    environment:
+      - APP_DEFAULT_LOCATE=ja_JP
+      - APP_DEFAULT_TIMEZONE=Asia/Tokyo
+      - DATABASE_HOST=pokemon-api-db
+      - DATABASE_USER=root
+      - DATABASE_PASS=secret
+      - DATABASE_NAME=pokemon
+    command: bash -c "sh docker-init-setup.sh && apache2-foreground"
+    ports:
+      - "5000:80"
+  db:
+    container_name: pokemon-api-db
+    build:
+      context: .
+      dockerfile: ./Docker/mysql/Dockerfile
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./Docker/mysql/sqls:/docker-entrypoint-initdb.d
+      - ./Docker/mysql/data:/var/lib/mysql 
