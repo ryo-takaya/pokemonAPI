@@ -5,17 +5,23 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
-class PokemonsController extends Controller{
+class PokemonsController extends AppController{
 
     public function initialize(){
         parent::initialize();
+        $this->loadComponent('Paginator');
         $this->loadModel('Pokemons');
         $this->loadModel('Attributes');
     }
 
+
     public function index()
     {
-        $pokemons = $this->Pokemons->find();
+        
+        $pokemons = $this->Paginate($this->Pokemons->find()->contain('Attributes'),[
+            'limit' => 5,
+            'order' => ['Pokeons.id' => 'DESC']
+        ]);
         $this->set(compact('pokemons'));
     }
 
@@ -42,7 +48,7 @@ class PokemonsController extends Controller{
         try{
             $pokemon = $this->Pokemons->findById($id)->firstOrFail();
         }catch(RecordNotFoundException $e){
-            throw new RecordNotFoundException('存在しないユーザーです');
+            throw new RecordNotFoundException('存在しないポケモンです');
         }
       
       $attributes = $this->Attributes->find()->reduce(function ($array, $value){
@@ -60,18 +66,17 @@ class PokemonsController extends Controller{
     }
 
     public function delete(string $id){
-       
-
         try{
             $pokemon = $this->Pokemons->findById($id)->firstOrFail();
         }catch(RecordNotFoundException $e){
-            throw new RecordNotFoundException('存在しないユーザーです');
+            throw new RecordNotFoundException('存在しないポケモンです');
         }
-
-        if($this->request->is('delete','post')){
+        
+        if($this->request->is('post')){
           if($this->Pokemons->delete($pokemon)){
-            $this->Flash->success(__('The {0} article has been deleted.', $pokemon->name));
+            $this->Flash->success('成功しました');
           }else{
+              var_dump('失敗');
             $this->Flash->error(__('The {0} article has been deleted.', $pokemon->name));
           }
         }

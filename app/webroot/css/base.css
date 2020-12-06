@@ -166,6 +166,8 @@ sup {
     vertical-align: baseline;
 }
 
+
+
 sup {
     top: -0.5em;
 }
@@ -183,6 +185,10 @@ sub {
 
 img {
     border: 0;
+}
+
+li {
+    list-style: none;
 }
 
 /**
