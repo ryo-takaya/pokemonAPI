@@ -14,10 +14,6 @@ class PokemonsTable extends Table{
       $this->addBehavior('Timestamp');
     }
 
-    public function test()
-    {
-        return 'test';
-    }
 
     public function validationDefault(Validator $validator)
     {

@@ -36,4 +36,20 @@ class PokemonsController extends Controller{
         $this->set('attributes',$attributes);
         $this->set('newPokemon', $newPokemon);
     }
+
+    public function edit(string $name){
+      $pokemon = $this->Pokemons->findByName($name)->firstOrFail();
+      $attributes = $this->Attributes->find()->reduce(function ($array, $value){
+        $array[$value->id] = "{$value->attribute_name}";
+        return $array;
+       },[]);
+      if($this->request->is('put','patch')){
+        $pokemon = $this->Pokemons->patchEntity($pokemon,$this->request->getData());
+        if($this->Pokemons->save($pokemon)){
+            return $this->redirect(['action'=>'index']);
+        }
+      }
+      $this->set(compact('attributes'));
+      $this->set(compact('pokemon'));
+    }
 }
