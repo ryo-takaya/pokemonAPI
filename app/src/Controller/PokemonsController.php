@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 class PokemonsController extends Controller{
 
@@ -37,8 +38,13 @@ class PokemonsController extends Controller{
         $this->set('newPokemon', $newPokemon);
     }
 
-    public function edit(string $name){
-      $pokemon = $this->Pokemons->findByName($name)->firstOrFail();
+    public function edit(string $id){
+        try{
+            $pokemon = $this->Pokemons->findById($id)->firstOrFail();
+        }catch(RecordNotFoundException $e){
+            throw new RecordNotFoundException('存在しないユーザーです');
+        }
+      
       $attributes = $this->Attributes->find()->reduce(function ($array, $value){
         $array[$value->id] = "{$value->attribute_name}";
         return $array;
@@ -51,5 +57,24 @@ class PokemonsController extends Controller{
       }
       $this->set(compact('attributes'));
       $this->set(compact('pokemon'));
+    }
+
+    public function delete(string $id){
+       
+
+        try{
+            $pokemon = $this->Pokemons->findById($id)->firstOrFail();
+        }catch(RecordNotFoundException $e){
+            throw new RecordNotFoundException('存在しないユーザーです');
+        }
+
+        if($this->request->is('delete','post')){
+          if($this->Pokemons->delete($pokemon)){
+            $this->Flash->success(__('The {0} article has been deleted.', $pokemon->name));
+          }else{
+            $this->Flash->error(__('The {0} article has been deleted.', $pokemon->name));
+          }
+        }
+        return $this->redirect(['action'=>'index']);
     }
 }
