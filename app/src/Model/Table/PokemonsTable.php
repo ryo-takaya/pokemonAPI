@@ -19,6 +19,12 @@ class PokemonsTable extends Table{
            ->setForeignKey('attribute_id');
     }
 
+    public function uploadImage(array $file){
+      $filePath = '../webroot/img/' . date("YmdHis") . $file['name']; 
+      move_uploaded_file($file['tmp_name'], $filePath); 
+      return date("YmdHis") . $file['name'];
+    }
+
 
     public function validationDefault(Validator $validator)
     {

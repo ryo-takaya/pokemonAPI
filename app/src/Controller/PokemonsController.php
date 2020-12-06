@@ -20,7 +20,7 @@ class PokemonsController extends AppController{
         
         $pokemons = $this->Paginate($this->Pokemons->find()->contain('Attributes'),[
             'limit' => 5,
-            'order' => ['Pokeons.id' => 'DESC']
+            'order' => ['Pokemons.id' => 'DESC']
         ]);
         $this->set(compact('pokemons'));
     }
@@ -33,7 +33,13 @@ class PokemonsController extends AppController{
          return $array;
         },[]);
         if($this->request->is('post','patch')){
-         $newPokemon = $this->Pokemons->patchEntity($newPokemon,$this->request->getData());
+            $fileUrl = $this->Pokemons->uploadImage($this->request->getData('image'));
+            $data = [
+                'name' => $this->request->getData('name'),
+                'attribute_id' => $this->request->getData('attribute_id'),
+                'image' => $fileUrl
+            ]; 
+         $newPokemon = $this->Pokemons->patchEntity($newPokemon,$data);
          
          if($this->Pokemons->save($newPokemon)){
           return $this->redirect(['action'=>'index']);

@@ -7,6 +7,7 @@ CREATE TABLE `pokemons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `attribute_id` int(10) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
+  `image` varchar(255) ,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
