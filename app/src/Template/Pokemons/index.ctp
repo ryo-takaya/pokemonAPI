@@ -1,8 +1,10 @@
+<div style='width:80%; margin:0 auto; text-align:center;'>
+
 <h2>ポケモン一覧</h2>
 <?= $this->Html->link('ポケモンを追加したい場合はこちら',['controller'=>'pokemons','action'=>'add']) ?>
 <ul>
 <?php foreach($pokemons as $pokemon): ?>
-<li>名前  <?= $pokemon->name ?> 属性   <?= $pokemon->attribute->attribute_name ?> <?=$this->Html->link('編集',['controller'=>'pokemons','action'=>'edit',$pokemon->id])?> <?= $this->Form->PostLink('削除',['controller'=>'pokemons','action'=>'delete','method'=>'delete', $pokemon->id ],['confirm' => 'このポケモンを削除してよろしいですか?']) ?></li>
+<li style=' list-style:none; border: medium solid black; width:20%; margin:10px auto;'> <p>名前 : <?= $pokemon->name ?></p> <p>属性 : <?= $pokemon->attribute->attribute_name ?></p> <?=$this->Html->link('編集',['controller'=>'pokemons','action'=>'edit',$pokemon->id])?> <?= $this->Form->PostLink('削除',['controller'=>'pokemons','action'=>'delete','method'=>'delete', $pokemon->id ],['confirm' => 'このポケモンを削除してよろしいですか?']) ?></li>
 <?php endforeach; ?>
 </ul>
 
@@ -14,4 +16,6 @@
       <?= $this->Paginator->next('次へ')?>
       <?= $this->Paginator->last('最後へ')?>
 </ul>
+</div>
+
 </div>

@@ -76,8 +76,7 @@ class PokemonsController extends AppController{
           if($this->Pokemons->delete($pokemon)){
             $this->Flash->success('成功しました');
           }else{
-              var_dump('失敗');
-            $this->Flash->error(__('The {0} article has been deleted.', $pokemon->name));
+            $this->Flash->error('失敗しました');
           }
         }
         return $this->redirect(['action'=>'index']);
